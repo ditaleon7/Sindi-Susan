@@ -28,10 +28,14 @@
 
 html{
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body{
   margin: 0;
+  overflow-x: hidden;
+  width: 100%;
   background: var(--pink-bg);
   color: var(--ink);
   font-family: var(--font-body);
@@ -80,12 +84,12 @@ a{ text-decoration: none; color: inherit; }
    ========================================================= */
 .reveal{
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity .6s ease, transform .6s ease;
+  transform: translateY(22px) scale(.94);
+  transition: opacity .65s cubic-bezier(.34,1.56,.64,1), transform .65s cubic-bezier(.34,1.56,.64,1);
 }
 .reveal.is-visible{
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity: 1; transform: none; transition: none; }
@@ -111,6 +115,7 @@ a{ text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 .logo{
@@ -118,6 +123,11 @@ a{ text-decoration: none; color: inherit; }
   font-weight: 700;
   font-size: 1.3rem;
   color: var(--pink-deep);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex-shrink: 1;
 }
 .logo span{ color: var(--pink-primary); }
 
@@ -152,6 +162,7 @@ a{ text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   gap: .8rem;
+  flex-shrink: 0;
 }
 
 .nav-cta{
@@ -226,6 +237,7 @@ a{ text-decoration: none; color: inherit; }
   filter: blur(50px);
   opacity: .5;
   z-index: 0;
+  animation: blob-float 9s ease-in-out infinite;
 }
 .blob-1{
   width: 260px;
@@ -240,6 +252,16 @@ a{ text-decoration: none; color: inherit; }
   background: var(--pink-line);
   bottom: 8%;
   right: 10%;
+  animation-direction: reverse;
+  animation-duration: 11s;
+}
+
+@keyframes blob-float{
+  0%, 100%{ transform: translate(0, 0) scale(1); }
+  50%{ transform: translate(18px, -18px) scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce){
+  .blob{ animation: none; }
 }
 
 .home-content{
@@ -313,6 +335,15 @@ a{ text-decoration: none; color: inherit; }
   justify-content: center;
   font-size: 1.1rem;
   box-shadow: var(--shadow-soft);
+  animation: badge-bounce 3s ease-in-out infinite;
+}
+
+@keyframes badge-bounce{
+  0%, 100%{ transform: translateY(0) rotate(0deg); }
+  50%{ transform: translateY(-5px) rotate(-8deg); }
+}
+@media (prefers-reduced-motion: reduce){
+  .photo-badge{ animation: none; }
 }
 
 @keyframes spin{
@@ -494,6 +525,23 @@ a{ text-decoration: none; color: inherit; }
   font-size: .85rem;
   padding: .4rem .9rem;
   border-radius: 999px;
+  display: inline-block;
+}
+.about-text.is-visible .trait-tags span{
+  animation: tag-pop .5s cubic-bezier(.34,1.56,.64,1) backwards;
+}
+.about-text.is-visible .trait-tags span:nth-child(1){ animation-delay: .1s; }
+.about-text.is-visible .trait-tags span:nth-child(2){ animation-delay: .2s; }
+.about-text.is-visible .trait-tags span:nth-child(3){ animation-delay: .3s; }
+.about-text.is-visible .trait-tags span:nth-child(4){ animation-delay: .4s; }
+
+@keyframes tag-pop{
+  0%{ opacity: 0; transform: scale(.5) translateY(10px); }
+  70%{ transform: scale(1.1) translateY(0); }
+  100%{ opacity: 1; transform: scale(1) translateY(0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .about-text.is-visible .trait-tags span{ animation: none; }
 }
 
 /* =========================================================
@@ -533,6 +581,16 @@ a{ text-decoration: none; color: inherit; }
 
 .skill-icon{ font-size: 1.5rem; margin-bottom: .5rem; line-height: 1; }
 .skill-icon svg{ display: block; }
+.skill-card:hover .skill-icon{ animation: icon-wiggle .5s ease; }
+
+@keyframes icon-wiggle{
+  0%, 100%{ transform: rotate(0deg) scale(1); }
+  30%{ transform: rotate(-12deg) scale(1.1); }
+  60%{ transform: rotate(10deg) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce){
+  .skill-card:hover .skill-icon{ animation: none; }
+}
 
 .skill-name{
   font-family: var(--font-display);
@@ -576,6 +634,15 @@ a{ text-decoration: none; color: inherit; }
   background: var(--pink-primary);
   border: 3px solid var(--white);
   box-shadow: 0 0 0 2px var(--pink-line);
+  animation: dot-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes dot-pulse{
+  0%, 100%{ box-shadow: 0 0 0 2px var(--pink-line); }
+  50%{ box-shadow: 0 0 0 6px var(--pink-line); }
+}
+@media (prefers-reduced-motion: reduce){
+  .timeline-dot{ animation: none; }
 }
 
 .timeline-card{
@@ -638,7 +705,8 @@ a{ text-decoration: none; color: inherit; }
   transform: translateX(4px);
   box-shadow: var(--shadow-soft);
 }
-.kontak-card .icon{ font-size: 1.4rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.kontak-card .icon{ font-size: 1.4rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .3s ease; }
+.kontak-card:hover .icon{ transform: rotate(-8deg) scale(1.12); }
 .kontak-detail{ display: flex; flex-direction: column; font-size: .92rem; }
 .kontak-detail strong{ font-family: var(--font-display); color: var(--pink-deep); }
 
@@ -785,4 +853,34 @@ a{ text-decoration: none; color: inherit; }
   .photo-stamp{ width: 170px; height: 170px; }
   .blob{ display: none; }
   .home{ padding: 90px 0 40px 0; }
+}
+
+@media (max-width: 380px){
+  .logo{ font-size: 1.05rem; max-width: 34vw; }
+  .nav-cta{ padding: .4rem .7rem; font-size: .68rem; }
+}
+
+/* =========================================================
+   FLOWER CURSOR TRAIL
+   ========================================================= */
+.flower-particle{
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+  will-change: transform, opacity;
+  animation: flower-float .9s ease-out forwards;
+}
+
+@keyframes flower-float{
+  0%{
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg) scale(.8);
+  }
+  100%{
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(var(--fx, 0px), -70px) rotate(var(--frot, 30deg)) scale(1.2);
+  }
 }

@@ -201,6 +201,44 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* -----------------------------------------------------
+     7. BUNGA WARNA-WARNI MENGIKUTI KURSOR
+  ----------------------------------------------------- */
+  function setupFlowerCursor() {
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    var flowers = ['🌸', '🌼', '🌷', '🌺', '🌻', '💮', '🌹'];
+    var lastSpawn = 0;
+    var minInterval = 90; // ms, biar tidak terlalu banyak partikel
+
+    document.addEventListener('mousemove', function (e) {
+      var now = Date.now();
+      if (now - lastSpawn < minInterval) return;
+      lastSpawn = now;
+
+      var flower = document.createElement('span');
+      flower.className = 'flower-particle';
+      flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+      flower.style.left = e.clientX + 'px';
+      flower.style.top = e.clientY + 'px';
+      flower.style.fontSize = (14 + Math.random() * 10) + 'px';
+      flower.style.setProperty('--fx', (Math.random() * 50 - 25) + 'px');
+      flower.style.setProperty('--frot', (Math.random() * 70 - 35) + 'deg');
+
+      document.body.appendChild(flower);
+
+      flower.addEventListener('animationend', function () {
+        flower.remove();
+      });
+
+      // fallback andaikan animationend tidak terpicu
+      setTimeout(function () {
+        if (flower.parentNode) flower.remove();
+      }, 1200);
+    });
+  }
+
+  /* -----------------------------------------------------
      INIT
   ----------------------------------------------------- */
   renderSkills();
@@ -209,5 +247,6 @@ document.addEventListener('DOMContentLoaded', function () {
   setupRevealOnScroll();
   setupContactForm();
   setupBackToTop();
+  setupFlowerCursor();
 
 });
