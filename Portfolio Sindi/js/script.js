@@ -123,60 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* -----------------------------------------------------
-     5. FORM KONTAK -> kirim ke Gmail via mailto:
-  ----------------------------------------------------- */
-  function setupContactForm() {
-    var form = document.getElementById('contactForm');
-    var note = document.getElementById('formNote');
-    if (!form) return;
-
-    var GMAIL_TUJUAN = 'sindisusan01@gmail.com'; // ganti dengan email Anda
-    var hideTimer = null;
-
-    function showNote(text, type) {
-      if (!note) return;
-      note.textContent = text;
-      note.className = 'form-note show ' + type;
-
-      if (hideTimer) clearTimeout(hideTimer);
-      hideTimer = setTimeout(function () {
-        note.classList.remove('show');
-      }, 5000);
-    }
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      var name = document.getElementById('fname').value.trim();
-      var email = document.getElementById('femail').value.trim();
-      var message = document.getElementById('fmessage').value.trim();
-
-      if (!name || !email || !message) {
-        showNote('Mohon lengkapi semua kolom terlebih dahulu.', 'error');
-        return;
-      }
-
-      var subject = 'Pesan dari Portofolio - ' + name;
-      var body =
-        'Nama: ' + name + '\n' +
-        'Email: ' + email + '\n\n' +
-        message;
-
-      var gmailComposeLink =
-        'https://mail.google.com/mail/?view=cm&fs=1' +
-        '&to=' + encodeURIComponent(GMAIL_TUJUAN) +
-        '&su=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(body);
-
-      window.open(gmailComposeLink, '_blank');
-
-      showNote('✅ Pesan berhasil terkirim! Terima kasih sudah menghubungi saya.', 'success');
-      form.reset();
-    });
-  }
-
-  /* -----------------------------------------------------
-     6. TOMBOL KEMBALI KE ATAS (muncul saat scroll ke bawah)
+     5. TOMBOL KEMBALI KE ATAS (muncul saat scroll ke bawah)
   ----------------------------------------------------- */
   function setupBackToTop() {
     var btn = document.getElementById('backToTop');
@@ -239,14 +186,46 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* -----------------------------------------------------
+     8. SALJU PINK JATUH DI LATAR WEBSITE
+  ----------------------------------------------------- */
+  function setupSnow() {
+    var container = document.getElementById('snowContainer');
+    if (!container) return;
+
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    var total = window.innerWidth < 600 ? 18 : 32;
+
+    for (var i = 0; i < total; i++) {
+      var flake = document.createElement('span');
+      flake.className = 'snowflake';
+
+      var size = 4 + Math.random() * 6; // 4px - 10px
+      var duration = 9 + Math.random() * 12; // 9s - 21s
+      var delay = -1 * Math.random() * duration; // biar langsung terlihat jatuh saat load
+      var sway = (Math.random() * 80 - 40); // goyangan kiri-kanan saat jatuh
+
+      flake.style.left = Math.random() * 100 + 'vw';
+      flake.style.width = size + 'px';
+      flake.style.height = size + 'px';
+      flake.style.setProperty('--dur', duration + 's');
+      flake.style.setProperty('--delay', delay + 's');
+      flake.style.setProperty('--sway', sway + 'px');
+
+      container.appendChild(flake);
+    }
+  }
+
+  /* -----------------------------------------------------
      INIT
   ----------------------------------------------------- */
   renderSkills();
   setupMobileMenu();
   setupActiveTab();
   setupRevealOnScroll();
-  setupContactForm();
   setupBackToTop();
   setupFlowerCursor();
+  setupSnow();
 
 });
